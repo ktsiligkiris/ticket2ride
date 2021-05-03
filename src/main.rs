@@ -457,12 +457,12 @@ fn get_tickets() -> Vec<Ticket> {
     tickets
 }
 
-fn dijkstra(source: City) -> (HashMap<City, u8>, HashMap<City, City>) {
+fn dijkstra(source: City, arrival: City) -> (HashMap<City, u8>, HashMap<City, City>) {
     let graph = create_network();
     let mut dist: HashMap<City, u8> = HashMap::new();
     let mut prev: HashMap<City, City> = HashMap::new();
     let mut q: Vec<City> = Vec::new();
-    let mut u: City = City::Dieppe;
+    let mut u: City;
 
     // initialize distances to 100 and set the distance of source to 0.
     // Since there are only 45 trains available in the game, the value of
@@ -476,11 +476,18 @@ fn dijkstra(source: City) -> (HashMap<City, u8>, HashMap<City, City>) {
     // The main loop
     while !q.is_empty() {
         u = q[0];
+        // Get the vertex with the smallest distance from q.
         for city in q.iter() {
             if dist.get(&city).unwrap() < dist.get(&u).unwrap() {
                 u = city.clone();
             }
         }
+        // the vertex with the shortest distance in q is our destination
+        // then quit from the while loop prematurely.
+        if u == arrival {
+            break;
+        }
+
         // Remove this vertex from q
         let index = q.iter().position(|&x| x == u).unwrap();
         q.remove(index);
@@ -498,7 +505,6 @@ fn dijkstra(source: City) -> (HashMap<City, u8>, HashMap<City, City>) {
                 }
             }
         }
-        // Get the vertex with the smallest distance from q.
     }
     return (dist, prev);
 }
@@ -531,14 +537,18 @@ fn main() {
     }
 
     // Test dijkstra
-    let (dist, prev) = dijkstra(City::Edinburgh);
+    let (dist, prev) = dijkstra(City::Edinburgh, City::Athina);
     println!(
         "Distance Edinburgh to Athens is {}",
         dist.get(&City::Athina).unwrap()
     );
     let mut current = City::Athina;
     while current != City::Edinburgh {
-        println!("Distance to {:?} is {}", current, dist.get(&current).unwrap());
+        println!(
+            "Distance to {:?} is {}",
+            current,
+            dist.get(&current).unwrap()
+        );
         current = *prev.get(&current).unwrap();
     }
 }
