@@ -515,7 +515,7 @@ fn main() {
     let tickets = get_tickets();
 
     println!("---- Big tickets ----");
-    for ticket in big_tickets {
+    for ticket in big_tickets.iter() {
         println!(
             "Depart from {:?}, arrive at {:?} and get {} points",
             ticket.depart, ticket.arrive, ticket.value
@@ -537,19 +537,21 @@ fn main() {
     }
 
     // Test dijkstra
-    let (dist, prev) = dijkstra(City::Edinburgh, City::Athina);
-    println!(
-        "Distance Edinburgh to Athens is {}",
-        dist.get(&City::Athina).unwrap()
-    );
-    let mut current = City::Athina;
-    while current != City::Edinburgh {
+    for ticket in big_tickets.iter() {
+        let (dist, prev) = dijkstra(ticket.depart, ticket.arrive);
         println!(
-            "Distance to {:?} is {}",
-            current,
-            dist.get(&current).unwrap()
+            "Distance from {:?} to {:?} is {}",
+            ticket.depart,
+            ticket.arrive,
+            dist.get(&ticket.arrive).unwrap()
         );
-        current = *prev.get(&current).unwrap();
+        println!("-- Backtracking of route --");
+        let mut current = ticket.arrive;
+        while current != ticket.depart {
+            print!("{:?} -> ", current);
+            current = *prev.get(&current).unwrap();
+        }
+        println!("{:?} -|", ticket.depart);
     }
 }
 
