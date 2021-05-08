@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use ticket2ride::*;
 
-fn dijkstra(source: City, arrival: City) -> (HashMap<City, u8>, HashMap<City, City>) {
+fn dijkstra(source: City, arrival: City, stop: bool) -> (HashMap<City, u8>, HashMap<City, City>) {
     let graph = create_network();
     let mut dist: HashMap<City, u8> = HashMap::new();
     let mut prev: HashMap<City, City> = HashMap::new();
@@ -28,7 +28,7 @@ fn dijkstra(source: City, arrival: City) -> (HashMap<City, u8>, HashMap<City, Ci
         }
         // the vertex with the shortest distance in q is our destination
         // then quit from the while loop prematurely.
-        if u == arrival {
+        if u == arrival && stop == true {
             break;
         }
 
@@ -71,10 +71,11 @@ fn get_scores(route: Vec<City>) -> u8 {
 }
 
 fn main() {
-    let routes = create_network();
+    // let routes = create_network();
     let big_tickets = get_big_tickets();
-    let tickets = get_tickets();
+    // let tickets = get_tickets();
 
+    /* Just for demo
     println!("---- Big tickets ----");
     for ticket in big_tickets.iter() {
         println!(
@@ -82,24 +83,29 @@ fn main() {
             ticket.depart, ticket.arrive, ticket.value
         );
     }
+     */
+    /* Just for demo
     println!("---- Normal tickets ----");
-    for ticket in tickets {
+    for ticket in tickets.iter() {
         println!(
             "Depart from {:?}, arrive at {:?} and get {} points",
             ticket.depart, ticket.arrive, ticket.value
         );
     }
+     */
+    /* Just for demo
     println!("---- Routes ----");
-    for (node, destinations) in routes {
+    for (node, destinations) in routes.iter() {
         println!("Starting from {:?} we can get to", node);
-        for (destination, distance) in destinations {
+        for (destination, distance) in destinations.iter() {
             println!("--> {:?} with {} trains", destination, distance);
         }
     }
+     */
 
-    // Test dijkstra
+    // Test Dijkstra
     for ticket in big_tickets.iter() {
-        let (dist, prev) = dijkstra(ticket.depart, ticket.arrive);
+        let (_, prev) = dijkstra(ticket.depart, ticket.arrive, true);
         print!(
             "Total score of ticket from {:?} to {:?} is ",
             ticket.depart, ticket.arrive
@@ -115,6 +121,18 @@ fn main() {
         let score = get_scores(route);
         println!("{}", score);
     }
+    // Get from Dijkstra the largest route the includes Edinburgh and Athina
+    let (distances, _previous) = dijkstra(City::Edinburgh, City::Athina, false);
+    let distant_city = distances
+        .iter()
+        .max_by(|a, b| a.1.cmp(&b.1))
+        .map(|(k, _v)| k)
+        .unwrap();
+    println!(
+        "The most distant city from Edinburgh is {:?} and it's distance is {:?}",
+        distant_city,
+        distances.get(&distant_city).unwrap()
+    );
 }
 
 #[cfg(test)]
@@ -130,8 +148,8 @@ mod tests {
     #[test]
     fn check_route_pairs() {
         let routes = create_network();
-        for (city, destinations) in &routes {
-            for (destination, distance) in destinations {
+        for (city, destinations) in routes.iter() {
+            for (destination, distance) in destinations.iter() {
                 assert_eq!(*distance, routes[destination][city]);
             }
         }
