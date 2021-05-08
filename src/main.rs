@@ -70,6 +70,13 @@ fn get_scores(route: Vec<City>) -> u8 {
     score
 }
 
+fn max_key<K, V>(hash: &HashMap<K, V>) -> Option<&K>
+where
+    V: Ord,
+{
+    hash.iter().max_by(|a, b| a.1.cmp(&b.1)).map(|(k, _v)| k)
+}
+
 fn main() {
     // let routes = create_network();
     let big_tickets = get_big_tickets();
@@ -122,17 +129,21 @@ fn main() {
         println!("{}", score);
     }
     // Get from Dijkstra the largest route the includes Edinburgh and Athina
-    let (distances, _previous) = dijkstra(City::Edinburgh, City::Athina, false);
-    let distant_city = distances
-        .iter()
-        .max_by(|a, b| a.1.cmp(&b.1))
-        .map(|(k, _v)| k)
-        .unwrap();
+    let (distances, previous) = dijkstra(City::Edinburgh, City::Athina, false);
+    let distant_city = max_key(&distances).unwrap();
     println!(
         "The most distant city from Edinburgh is {:?} and it's distance is {:?}",
         distant_city,
         distances.get(&distant_city).unwrap()
     );
+    let mut big_route: Vec<City> = Vec::new();
+    big_route.push(*distant_city);
+    let mut current_city = distant_city;
+    while *current_city != City::Edinburgh {
+        current_city = previous.get(&current_city).unwrap();
+        big_route.push(*current_city);
+    }
+    println!("The big route is {:?}", big_route);
 }
 
 #[cfg(test)]
