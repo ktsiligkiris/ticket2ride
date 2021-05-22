@@ -17,7 +17,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use ticket2ride::create_network;
+    use ticket2ride::{create_network, City};
 
     #[test]
     fn check_kyiv_has_6_routes() {

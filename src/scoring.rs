@@ -1,18 +1,18 @@
 use ticket2ride::{create_network, get_big_tickets, get_tickets, City};
 
-pub fn get_scores(route: Vec<City>) -> u8 {
-    let mut score: u8 = 0;
+pub fn get_scores(route: Vec<City>) -> u16 {
+    let mut score: u16 = 0;
     let routes = create_network();
     let big_tickets = get_big_tickets();
     let small_tickets = get_tickets();
     for ticket in big_tickets.iter() {
         if route.iter().any(|&i| i == ticket.depart) && route.iter().any(|&i| i == ticket.arrive) {
-            score += ticket.value;
+            score += ticket.value as u16;
         }
     }
     for ticket in small_tickets.iter() {
         if route.iter().any(|&i| i == ticket.depart) && route.iter().any(|&i| i == ticket.arrive) {
-            score += ticket.value;
+            score += ticket.value as u16;
         }
     }
     // Get score from used trains
