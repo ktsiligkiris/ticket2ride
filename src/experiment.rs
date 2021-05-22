@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+use crate::routing::dijkstra;
+use crate::scoring::get_scores;
 use ticket2ride::*;
 
 pub fn demo_bigtickets() {
@@ -34,4 +37,42 @@ pub fn demo_network() {
             println!("--> {:?} with {} trains", destination, distance);
         }
     }
+}
+
+pub fn demo_dijkstra() {
+    let big_tickets = get_big_tickets();
+
+    for ticket in big_tickets.iter() {
+        let (_, prev) = dijkstra(ticket.depart, ticket.arrive, true);
+        print!(
+            "Total score of ticket from {:?} to {:?} is ",
+            ticket.depart, ticket.arrive
+        );
+        let mut route: Vec<City> = Vec::new();
+        let mut current = ticket.arrive;
+        route.push(current);
+
+        while current != ticket.depart {
+            current = *prev.get(&current).unwrap();
+            route.push(current);
+        }
+        let score = get_scores(route);
+        println!("{}", score);
+    }
+    // Get from Dijkstra the largest route the includes Edinburgh and Athina
+    let (distances, previous) = dijkstra(City::Edinburgh, City::Athina, false);
+    let distant_city = max_key(&distances).unwrap();
+    println!(
+        "The most distant city from Edinburgh is {:?} and it's distance is {:?}",
+        distant_city,
+        distances.get(&distant_city).unwrap()
+    );
+    let mut big_route: Vec<City> = Vec::new();
+    big_route.push(*distant_city);
+    let mut current_city = distant_city;
+    while *current_city != City::Edinburgh {
+        current_city = previous.get(&current_city).unwrap();
+        big_route.push(*current_city);
+    }
+    println!("The big route is {:?}", big_route);
 }

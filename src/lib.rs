@@ -456,3 +456,10 @@ pub fn get_tickets() -> Vec<Ticket> {
 
     tickets
 }
+
+pub fn max_key<K, V>(hash: &HashMap<K, V>) -> Option<&K>
+where
+    V: Ord,
+{
+    hash.iter().max_by(|a, b| a.1.cmp(&b.1)).map(|(k, _v)| k)
+}
