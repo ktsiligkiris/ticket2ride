@@ -16,8 +16,8 @@ pub fn dijkstra(
     // Since there are only 45 trains available in the game, the value of
     // 100 is basically infinity.
     for (city, _) in graph.iter() {
-        dist.insert(city.clone(), 100);
-        q.push(city.clone());
+        dist.insert(*city, 100);
+        q.push(*city);
     }
     dist.insert(source, 0);
 
@@ -27,7 +27,7 @@ pub fn dijkstra(
         // Get the vertex with the smallest distance from q.
         for city in q.iter() {
             if dist.get(&city).unwrap() < dist.get(&u).unwrap() {
-                u = city.clone();
+                u = *city;
             }
         }
         // the vertex with the shortest distance in q is our destination
@@ -48,8 +48,8 @@ pub fn dijkstra(
                 // Maximum number of trains in game is 45, so you can't have a distance
                 // greater than that.
                 if alt < *dist.get(&destination).unwrap() && alt <= 45 {
-                    dist.insert(destination.clone(), alt);
-                    prev.insert(destination.clone(), u.clone());
+                    dist.insert(*destination, alt);
+                    prev.insert(*destination, u);
                 }
             }
         }
