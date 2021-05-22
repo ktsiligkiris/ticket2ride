@@ -1,6 +1,6 @@
 #![allow(dead_code)]
-use crate::routing::dijkstra;
-use crate::scoring::get_scores;
+use crate::routing;
+use crate::scoring;
 use ticket2ride::*;
 
 pub fn demo_bigtickets() {
@@ -43,7 +43,7 @@ pub fn demo_dijkstra() {
     let big_tickets = get_big_tickets();
 
     for ticket in big_tickets.iter() {
-        let (_, prev) = dijkstra(ticket.depart, ticket.arrive, true);
+        let (_, prev) = routing::dijkstra(ticket.depart, ticket.arrive, true);
         print!(
             "Total score of ticket from {:?} to {:?} is ",
             ticket.depart, ticket.arrive
@@ -56,11 +56,11 @@ pub fn demo_dijkstra() {
             current = *prev.get(&current).unwrap();
             route.push(current);
         }
-        let score = get_scores(route);
+        let score = scoring::get_scores(route);
         println!("{}", score);
     }
     // Get from Dijkstra the largest route the includes Edinburgh and Athina
-    let (distances, previous) = dijkstra(City::Edinburgh, City::Athina, false);
+    let (distances, previous) = routing::dijkstra(City::Edinburgh, City::Athina, false);
     let distant_city = max_key(&distances).unwrap();
     println!(
         "The most distant city from Edinburgh is {:?} and it's distance is {:?}",
