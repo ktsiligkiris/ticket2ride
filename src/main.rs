@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use ticket2ride::*;
+mod experiment;
 
 fn dijkstra(source: City, arrival: City, stop: bool) -> (HashMap<City, u8>, HashMap<City, City>) {
     let graph = create_network();
@@ -78,37 +79,16 @@ where
 }
 
 fn main() {
-    // let routes = create_network();
     let big_tickets = get_big_tickets();
-    // let tickets = get_tickets();
 
-    /* Just for demo
-    println!("---- Big tickets ----");
-    for ticket in big_tickets.iter() {
-        println!(
-            "Depart from {:?}, arrive at {:?} and get {} points",
-            ticket.depart, ticket.arrive, ticket.value
-        );
-    }
-     */
-    /* Just for demo
-    println!("---- Normal tickets ----");
-    for ticket in tickets.iter() {
-        println!(
-            "Depart from {:?}, arrive at {:?} and get {} points",
-            ticket.depart, ticket.arrive, ticket.value
-        );
-    }
-     */
-    /* Just for demo
-    println!("---- Routes ----");
-    for (node, destinations) in routes.iter() {
-        println!("Starting from {:?} we can get to", node);
-        for (destination, distance) in destinations.iter() {
-            println!("--> {:?} with {} trains", destination, distance);
-        }
-    }
-     */
+    /* These functions come from the experiment.rs file where I keep
+     * demo functions to test various functionality. In this way, I
+     * keep main function more clean.*/
+    // experiment::demo_bigtickets();
+
+    // experiment::demo_normaltickets();
+
+    // experiment::demo_network();
 
     // Test Dijkstra
     for ticket in big_tickets.iter() {
