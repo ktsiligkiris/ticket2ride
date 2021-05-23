@@ -2,31 +2,40 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use ticket2ride::{create_network, City};
 
+/** Let's just think what we need for the design of this function to
+    work.
+
+First thing, we have a TTL value which is the number of *trains* can't
+be more than 45.
+
+So we start from source.
+
+We check the first child, if it is visited. So one hashmap to add the
+visited children.
+
+If it's not visited and if the current number of trains is not > = the
+distance then we can go there.
+
+So the child is added to *current vector* with the first id, it is
+also added to visited, and it becomes the next current point in our
+graph.
+
+Then check children continuously, until we either reach a point where
+no more trains are available, or no more non visited children are
+available.
+
+Then we need to back track, how do we do that? So there is a
+solution. We have a mutable vector that new children are pushed there,
+and when we reach a point that nothing can be done, then this vector
+is cloned inside the hashmap, the id of the hashmap is incremented,
+and we pop from the end of the vector, until we find a city that has
+unvisited children.
+
+In this way, we can have all the available courses starting from one
+city. Also, the thing to do is to remove a child from visited when
+backtracking, but to exclude it from the children, so that we don't
+have a loop of going and returning.*/
 pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
-    /* Let's just think what we need for the design of this function
-         * to work. First thing, we have a TTL value which is the number
-         * of *trains* can't be more than 45.
-        1. So we start from source.
-
-    We check the first child, if it is visited. So one hashmap to add
-         * the visited children. If it's not visited and if the current
-         * number of trains minus the distance is not < 0 then we can go
-         * there. So the child is added to *current vector* with the first
-         * id, it is also added to visited, and it becomes the next
-         * current point in our graph. Then check children continuously,
-         * until we either reach a point where no more trains are
-         * available, or no more non visited children are available. Then
-         * we need to back track, how do we do that? So there is a
-         * solution. We have a mutable vector that new children are pushed
-         * there, and when we reach a point that nothing can be done, then
-         * this vector is cloned inside the hashmap, the id of the hashmap
-         * is incremented, and we pop from the end of the vector, until we
-         * find a city that has unvisited children. In this way, we can
-         * have all the available courses starting from one city. Also,
-         * the thing to do is to remove a child from visited when
-         * backtracking, but to exclude it from the children, so that we
-         * don't have a loop of going and returning.*/
-
     let mut routes: HashMap<u16, Vec<City>> = HashMap::new();
     let mut route_id: u16 = 0;
     let mut current_route: Vec<City> = Vec::new();
