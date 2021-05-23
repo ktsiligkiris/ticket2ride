@@ -1,5 +1,96 @@
 use std::collections::HashMap;
+use std::collections::HashSet;
 use ticket2ride::{create_network, City};
+
+pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
+    /* Let's just think what we need for the design of this function
+         * to work. First thing, we have a TTL value which is the number
+         * of *trains* can't be more than 45.
+        1. So we start from source.
+
+    We check the first child, if it is visited. So one hashmap to add
+         * the visited children. If it's not visited and if the current
+         * number of trains minus the distance is not < 0 then we can go
+         * there. So the child is added to *current vector* with the first
+         * id, it is also added to visited, and it becomes the next
+         * current point in our graph. Then check children continuously,
+         * until we either reach a point where no more trains are
+         * available, or no more non visited children are available. Then
+         * we need to back track, how do we do that? So there is a
+         * solution. We have a mutable vector that new children are pushed
+         * there, and when we reach a point that nothing can be done, then
+         * this vector is cloned inside the hashmap, the id of the hashmap
+         * is incremented, and we pop from the end of the vector, until we
+         * find a city that has unvisited children. In this way, we can
+         * have all the available courses starting from one city. Also,
+         * the thing to do is to remove a child from visited when
+         * backtracking, but to exclude it from the children, so that we
+         * don't have a loop of going and returning.*/
+
+    let mut routes: HashMap<u16, Vec<City>> = HashMap::new();
+    let mut route_id: u16 = 0;
+    let mut current_route: Vec<City> = Vec::new();
+    let mut trains: u8 = 45;
+    let graph = create_network();
+    let mut current_city: City = source.clone();
+    let mut visited: HashMap<City, HashSet<City>> = HashMap::new();
+    let mut backtracking: bool = false;
+
+    current_route.push(current_city);
+    visited.insert(current_city, HashSet::new());
+
+    while !current_route.is_empty() {
+        let mut destinations = graph
+            .get(&current_city)
+            .unwrap()
+            .iter()
+            .filter(|city| match city {
+                (k, _) => !visited[&current_city].contains(k),
+            });
+        let dest = destinations.next();
+        match dest {
+            Some((next, distance)) => {
+                backtracking = false;
+                if trains >= *distance {
+                    visited
+                        .entry(*next)
+                        .or_insert(HashSet::new())
+                        .insert(current_city);
+                    visited
+                        .entry(current_city)
+                        .or_insert(HashSet::new())
+                        .insert(*next);
+                    current_city = *next;
+                    current_route.push(current_city);
+                    trains -= *distance;
+                } else {
+                    visited
+                        .entry(current_city)
+                        .or_insert(HashSet::new())
+                        .insert(*next);
+                }
+            }
+            None => {
+                if backtracking == false {
+                    routes.insert(route_id, current_route.clone());
+                    route_id += 1;
+                    backtracking = true;
+                }
+                current_route.pop();
+                let dead_end = current_city;
+                match current_route.last() {
+                    Some(city) => {
+                        current_city = *city;
+                        trains += graph.get(&current_city).unwrap()[&dead_end];
+                    }
+                    None => println!("None returned"),
+                };
+            }
+        }
+    }
+
+    routes
+}
 
 pub fn dijkstra(
     source: City,

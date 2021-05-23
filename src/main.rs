@@ -1,3 +1,4 @@
+use ticket2ride::City;
 mod experiment;
 mod routing;
 mod scoring;
@@ -12,7 +13,12 @@ fn main() {
 
     // experiment::demo_network();
 
-    experiment::demo_dijkstra();
+    //experiment::demo_dijkstra();
+
+    let routes = routing::traverse(City::Edinburgh);
+    for (id, route) in routes.iter() {
+        println!("Route no. {:?} is {:?}", id, route);
+    }
 }
 
 #[cfg(test)]
