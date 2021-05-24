@@ -92,7 +92,7 @@ pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
                         current_city = *city;
                         trains += graph.get(&current_city).unwrap()[&dead_end];
                     }
-                    None => println!("None returned"),
+                    None => println!("Route {:?} returned None", route_id),
                 };
             }
         }

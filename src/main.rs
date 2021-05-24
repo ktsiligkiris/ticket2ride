@@ -19,6 +19,28 @@ fn main() {
     for (id, route) in routes.iter() {
         println!("Route no. {:?} is {:?}", id, route);
     }
+
+    // I'll try some routes that came up from initial traverse. I'll
+    // need to add logic here that will compute the scores of all
+    // routes computed by the traverse function and then I'll print
+    // the route with the highest score, and the score of that route.
+    let score1 = scoring::get_scores(vec![
+        City::Edinburgh,
+        City::London,
+        City::Amsterdam,
+        City::Essen,
+        City::Berlin,
+        City::Wien,
+        City::Muenchen,
+        City::Venezia,
+        City::Roma,
+        City::Palermo,
+        City::Brindisi,
+        City::Athina,
+        City::Smyrna,
+        City::Constantinople,
+    ]);
+    println!("The score is {:?}", score1);
 }
 
 #[cfg(test)]
