@@ -1,4 +1,5 @@
-use ticket2ride::City;
+use std::collections::HashMap;
+use ticket2ride::{max_key, City};
 mod experiment;
 mod routing;
 mod scoring;
@@ -15,32 +16,19 @@ fn main() {
 
     //experiment::demo_dijkstra();
 
-    let routes = routing::traverse(City::Edinburgh);
+    let routes = routing::traverse(City::Brest);
+    let mut scores: HashMap<u32, u16> = HashMap::new();
     for (id, route) in routes.iter() {
-        println!("Route no. {:?} is {:?}", id, route);
+        let score: u16 = scoring::get_scores(route.to_vec());
+        scores.entry(*id).or_insert(score);
     }
+    let maxkey = max_key(&scores).unwrap();
 
-    // I'll try some routes that came up from initial traverse. I'll
-    // need to add logic here that will compute the scores of all
-    // routes computed by the traverse function and then I'll print
-    // the route with the highest score, and the score of that route.
-    let score1 = scoring::get_scores(vec![
-        City::Edinburgh,
-        City::London,
-        City::Amsterdam,
-        City::Essen,
-        City::Berlin,
-        City::Wien,
-        City::Muenchen,
-        City::Venezia,
-        City::Roma,
-        City::Palermo,
-        City::Brindisi,
-        City::Athina,
-        City::Smyrna,
-        City::Constantinople,
-    ]);
-    println!("The score is {:?}", score1);
+    println!(
+        "The route {:?} has maximum score {:?}",
+        routes.get(&maxkey).unwrap(),
+        scores.get(&maxkey).unwrap()
+    );
 }
 
 #[cfg(test)]

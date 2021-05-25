@@ -35,9 +35,9 @@ In this way, we can have all the available courses starting from one
 city. Also, the thing to do is to remove a child from visited when
 backtracking, but to exclude it from the children, so that we don't
 have a loop of going and returning.*/
-pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
-    let mut routes: HashMap<u16, Vec<City>> = HashMap::new();
-    let mut route_id: u16 = 0;
+pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
+    let mut routes: HashMap<u32, Vec<City>> = HashMap::new();
+    let mut route_id: u32 = 0;
     let mut current_route: Vec<City> = Vec::new();
     let mut trains: u8 = 45;
     let graph = create_network();
@@ -54,7 +54,9 @@ pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
             .unwrap()
             .iter()
             .filter(|city| match city {
-                (k, _) => !visited[&current_city].contains(k),
+                (k, _) => {
+                    !visited[&current_city].contains(k) && !current_route.iter().any(|i| i == *k)
+                }
             });
         let dest = destinations.next();
         match dest {
@@ -85,14 +87,14 @@ pub fn traverse(source: City) -> HashMap<u16, Vec<City>> {
                     route_id += 1;
                     backtracking = true;
                 }
-                current_route.pop();
-                let dead_end = current_city;
+                let dead_end = current_route.pop().unwrap();
+                visited.insert(dead_end, HashSet::new());
                 match current_route.last() {
                     Some(city) => {
                         current_city = *city;
                         trains += graph.get(&current_city).unwrap()[&dead_end];
                     }
-                    None => println!("Route {:?} returned None", route_id),
+                    None => println!("Route {:?} is the last one", route_id),
                 };
             }
         }
