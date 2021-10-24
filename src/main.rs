@@ -1,10 +1,27 @@
+use clap::{App, Arg};
 use std::collections::HashMap;
+use std::str::FromStr;
 use ticket2ride::{max_key, City};
 mod experiment;
 mod routing;
 mod scoring;
 
 fn main() {
+    let matches = App::new("ticket2ride max route finder")
+        .version("0.2")
+        .author("Konstantinos Tsiligkiris <ktsiligkiris@outlook.com")
+        .about("Tries to find the theoretical max score in ticket2ride")
+        .arg(
+            Arg::with_name("city")
+                .short("c")
+                .long("city")
+                .value_name("Start")
+                .help("Sets the City to start from")
+                .takes_value(true),
+        )
+        .get_matches();
+
+    let startcity = matches.value_of("city").unwrap_or("Edinburgh");
     /* These functions come from the experiment.rs file where I keep
      * demo functions to test various functionality. In this way, I
      * keep main function more clean.*/
@@ -16,7 +33,7 @@ fn main() {
 
     //experiment::demo_dijkstra();
 
-    let routes = routing::traverse(City::Brest);
+    let routes = routing::traverse(City::from_str(startcity).unwrap());
     let mut scores: HashMap<u32, u16> = HashMap::new();
     for (id, route) in routes.iter() {
         let score: u16 = scoring::get_scores(route.to_vec());

@@ -1,6 +1,6 @@
 [package]
 name = "ticket2ride"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Kostas Tsiligkiris <ktsiligkiris@outlook.com>"]
 edition = "2018"
 
@@ -11,3 +11,4 @@ name = "ticket2ride"
 path = "src/lib.rs"
 
 [dependencies]
+clap = "2.33.3"
