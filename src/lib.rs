@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum City {
@@ -49,6 +50,63 @@ pub enum City {
     Sevastopol,
     Erzurum,
     Sochi,
+}
+
+impl FromStr for City {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<City, Self::Err> {
+        match input {
+            "Edinburgh" => Ok(City::Edinburgh),
+            "London" => Ok(City::London),
+            "Dieppe" => Ok(City::Dieppe),
+            "Amsterdam" => Ok(City::Amsterdam),
+            "Brest" => Ok(City::Brest),
+            "Paris" => Ok(City::Paris),
+            "Bruxelles" => Ok(City::Bruxelles),
+            "Essen" => Ok(City::Essen),
+            "Frankfurt" => Ok(City::Frankfurt),
+            "Pamplona" => Ok(City::Pamplona),
+            "Zuerich" => Ok(City::Zuerich),
+            "Marseille" => Ok(City::Marseille),
+            "Kobenhavn" => Ok(City::Kobenhavn),
+            "Berlin" => Ok(City::Berlin),
+            "Muenchen" => Ok(City::Muenchen),
+            "Madrid" => Ok(City::Madrid),
+            "Barcelona" => Ok(City::Barcelona),
+            "Venezia" => Ok(City::Venezia),
+            "Roma" => Ok(City::Roma),
+            "Stockholm" => Ok(City::Stockholm),
+            "Danzig" => Ok(City::Danzig),
+            "Warszawa" => Ok(City::Warszawa),
+            "Wien" => Ok(City::Wien),
+            "Lisboa" => Ok(City::Lisboa),
+            "Cadiz" => Ok(City::Cadiz),
+            "Zagrab" => Ok(City::Zagrab),
+            "Brindisi" => Ok(City::Brindisi),
+            "Palermo" => Ok(City::Palermo),
+            "Petrograd" => Ok(City::Petrograd),
+            "Riga" => Ok(City::Riga),
+            "Wilno" => Ok(City::Wilno),
+            "Kyiv" => Ok(City::Kyiv),
+            "Budapest" => Ok(City::Budapest),
+            "Sarajevo" => Ok(City::Sarajevo),
+            "Athina" => Ok(City::Athina),
+            "Smyrna" => Ok(City::Smyrna),
+            "Moskva" => Ok(City::Moskva),
+            "Smolensk" => Ok(City::Smolensk),
+            "Kharkov" => Ok(City::Kharkov),
+            "Bucuresti" => Ok(City::Bucuresti),
+            "Sofia" => Ok(City::Sofia),
+            "Constantinople" => Ok(City::Constantinople),
+            "Angora" => Ok(City::Angora),
+            "Rostov" => Ok(City::Rostov),
+            "Sevastopol" => Ok(City::Sevastopol),
+            "Erzurum" => Ok(City::Erzurum),
+            "Sochi" => Ok(City::Sochi),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Debug)]
