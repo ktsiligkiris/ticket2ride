@@ -2,6 +2,12 @@
 name = "ticket2ride"
 version = "0.2.1"
 authors = ["Kostas Tsiligkiris <ktsiligkiris@outlook.com>"]
+license = "Apache-2.0"
+description = "A small program to compute the theoretically largest score in ticket to ride Europe"
+readme = "README.org"
+repository = "https://github.com/ktsiligkiris/ticket2ride"
+keywords = ["ticket2ride", "ticket-to-ride", "board-game", "max-score"]
+categories = ["command-line-utilities"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
