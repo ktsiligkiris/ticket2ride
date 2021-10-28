@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate clap;
+
 use clap::{App, Arg};
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -8,8 +11,8 @@ mod scoring;
 
 fn main() {
     let matches = App::new("ticket2ride max route finder")
-        .version("0.2")
-        .author("Konstantinos Tsiligkiris <ktsiligkiris@outlook.com")
+        .version(crate_version!())
+        .author(crate_authors!())
         .about("Tries to find the theoretical max score in ticket2ride")
         .arg(
             Arg::with_name("city")

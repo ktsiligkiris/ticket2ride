@@ -1,6 +1,6 @@
 [package]
 name = "ticket2ride"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Kostas Tsiligkiris <ktsiligkiris@outlook.com>"]
 edition = "2018"
 
