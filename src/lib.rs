@@ -1,6 +1,16 @@
+//! Relevant data structures for representing ticket to ride Europe.
+//!
+//! Here I provide some enumerations and hash maps that are required
+//! for representing the ticket to ride Europe game in my code. This
+//! is a first implementation so be gentle in judging it.
+
 use std::collections::HashMap;
 use std::str::FromStr;
 
+/// All available cities of the game are included into this handy
+/// enumeration, so that my code is more clear. The cities are not
+/// entered with any particular order, I just started from Edinburgh
+/// and traversed the map gradually most of the times randomly.
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum City {
     Edinburgh,
@@ -52,6 +62,11 @@ pub enum City {
     Sochi,
 }
 
+/// When I decided to provide the City to start the solution I
+/// realized that I had to convert the string to the enumeration. In
+/// order to do that, I needed to implement the FromStr trait, which
+/// give to the enumeration the handy .from_str function! I just had
+/// to map each string to the specific city.
 impl FromStr for City {
     type Err = ();
 
@@ -109,6 +124,10 @@ impl FromStr for City {
     }
 }
 
+/// The struct for representing a game ticket which includes the
+/// departure city, the arrival city and the value of the ticket when
+/// it is satisfied. This struct is used for both regular tickets the
+/// six big tickets.
 #[derive(Debug)]
 pub struct Ticket {
     pub depart: City,
@@ -126,6 +145,15 @@ impl Ticket {
     }
 }
 
+/// This function creates the game network. This is a Hash map of
+/// which the keys are the cities of the game and the value of each
+/// key is a Hash map of the cities that the key city can connect with
+/// and the number of trains that are needed to connect to that city.
+///
+/// destination HashMap is used to fill it in with all the relevant
+/// destinations of a city each time, and when it is cloned in the
+/// network HashMap as the value of the key, it is cleared and reused
+/// for the next city's destinations.
 pub fn create_network() -> HashMap<City, HashMap<City, u8>> {
     let mut network = HashMap::<City, HashMap<City, u8>>::new();
 
@@ -455,6 +483,10 @@ pub fn create_network() -> HashMap<City, HashMap<City, u8>> {
     network
 }
 
+/// This function returns a vector with the 6 big tickets of the
+/// game. Differentiating between big tickets and small tickets is not
+/// relevant for computing the max theoretical score but still it's
+/// nice to have it separately, for future stuff to come.
 pub fn get_big_tickets() -> Vec<Ticket> {
     let big_tickets = vec![
         Ticket::new(City::Brest, City::Petrograd, 20),
@@ -468,6 +500,7 @@ pub fn get_big_tickets() -> Vec<Ticket> {
     big_tickets
 }
 
+/// This returns a vector with the regular tickets of the game.
 pub fn get_tickets() -> Vec<Ticket> {
     let tickets = vec![
         Ticket::new(City::Amsterdam, City::Pamplona, 7),
@@ -515,6 +548,10 @@ pub fn get_tickets() -> Vec<Ticket> {
     tickets
 }
 
+/// This is a helper function the finds the maximum value in a HashMap
+/// and returns the key of that maximum value. This is basically used
+/// to find the path with the largest score in the possible paths
+/// computed from a specific starting city.
 pub fn max_key<K, V>(hash: &HashMap<K, V>) -> Option<&K>
 where
     V: Ord,
