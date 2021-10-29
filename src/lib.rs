@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 //! Relevant data structures for representing ticket to ride Europe.
 //!
 //! Here I provide some enumerations and hash maps that are required
@@ -13,60 +14,118 @@ use std::str::FromStr;
 /// and traversed the map gradually most of the times randomly.
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum City {
+    /// These are all cities included in the board game of Ticket to
+    /// Ride, Europe edition. They don't have a specific meaning to be
+    /// documented, other than they are a nice way to keep track for
+    /// me.
     Edinburgh,
+    ///
     London,
+    ///
     Dieppe,
+    ///
     Amsterdam,
+    ///
     Brest,
+    ///
     Paris,
+    ///
     Bruxelles,
+    ///
     Essen,
+    ///
     Frankfurt,
+    ///
     Pamplona,
+    ///
     Zuerich,
+    ///
     Marseille,
+    ///
     Kobenhavn,
+    ///
     Berlin,
+    ///
     Muenchen,
+    ///
     Madrid,
+    ///
     Barcelona,
+    ///
     Venezia,
+    ///
     Roma,
+    ///
     Stockholm,
+    ///
     Danzig,
+    ///
     Warszawa,
+    ///
     Wien,
+    ///
     Lisboa,
+    ///
     Cadiz,
+    ///
     Zagrab,
+    ///
     Brindisi,
+    ///
     Palermo,
+    ///
     Petrograd,
+    ///
     Riga,
+    ///
     Wilno,
+    ///
     Kyiv,
+    ///
     Budapest,
+    ///
     Sarajevo,
+    ///
     Athina,
+    ///
     Smyrna,
+    ///
     Moskva,
+    ///
     Smolensk,
+    ///
     Kharkov,
+    ///
     Bucuresti,
+    ///
     Sofia,
+    ///
     Constantinople,
+    ///
     Angora,
+    ///
     Rostov,
+    ///
     Sevastopol,
+    ///
     Erzurum,
+    ///
     Sochi,
 }
 
 /// When I decided to provide the City to start the solution I
 /// realized that I had to convert the string to the enumeration. In
 /// order to do that, I needed to implement the FromStr trait, which
-/// give to the enumeration the handy .from_str function! I just had
+/// give to the enumeration the handy from_str function! I just had
 /// to map each string to the specific city.
+/// # Example
+///
+/// ```
+/// # use ticket2ride::City;
+/// # use std::str::FromStr;
+/// let start_city = "Athina"; // This could come from clap
+/// let begin = City::from_str(start_city).unwrap();
+/// ```
 impl FromStr for City {
     type Err = ();
 
@@ -130,12 +189,24 @@ impl FromStr for City {
 /// six big tickets.
 #[derive(Debug)]
 pub struct Ticket {
+    /// The departing city of the ticket
     pub depart: City,
+    /// The arriving city of the ticket
     pub arrive: City,
+    /// The value of the ticket that counts towards the total score
+    /// for the game (provided that the ticket is served in a normal
+    /// game)
     pub value: u8,
 }
 
 impl Ticket {
+    /// The constructor of a Ticket struct
+    /// # Example
+    ///
+    /// ```
+    /// # use ticket2ride::{City, Ticket};
+    /// let small_ticket = Ticket::new(City::Edinburgh, City::Athina, 20);
+    /// ```
     pub fn new(depart: City, arrive: City, value: u8) -> Ticket {
         return Ticket {
             depart,
