@@ -1,6 +1,6 @@
 [package]
 name = "ticket2ride"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Kostas Tsiligkiris <ktsiligkiris@outlook.com>"]
 license = "Apache-2.0"
 description = "A small program to compute the theoretically largest score in ticket to ride Europe"

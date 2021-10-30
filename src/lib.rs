@@ -16,8 +16,8 @@ use std::str::FromStr;
 pub enum City {
     /// These are all cities included in the board game of Ticket to
     /// Ride, Europe edition. They don't have a specific meaning to be
-    /// documented, other than they are a nice way to keep track for
-    /// me.
+    /// documented, other than that they are a nice way to keep track
+    /// for me.
     Edinburgh,
     ///
     London,
@@ -116,7 +116,7 @@ pub enum City {
 /// When I decided to provide the City to start the solution I
 /// realized that I had to convert the string to the enumeration. In
 /// order to do that, I needed to implement the FromStr trait, which
-/// give to the enumeration the handy from_str function! I just had
+/// gives to the enumeration the handy from_str function! I just had
 /// to map each string to the specific city.
 /// # Example
 ///
@@ -185,8 +185,8 @@ impl FromStr for City {
 
 /// The struct for representing a game ticket which includes the
 /// departure city, the arrival city and the value of the ticket when
-/// it is satisfied. This struct is used for both regular tickets the
-/// six big tickets.
+/// it is satisfied. This struct is used for both regular tickets and
+/// the six big tickets.
 #[derive(Debug)]
 pub struct Ticket {
     /// The departing city of the ticket

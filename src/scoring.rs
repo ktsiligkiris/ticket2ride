@@ -6,6 +6,8 @@ pub fn get_scores(route: Vec<City>) -> u16 {
     score += big_ticket_score(&route);
     score += ticket_score(&route);
     score += trains_score(&route);
+    score += 10; // This is the express bonus
+    score += 12; // This is the unused stations score
     score
 }
 
@@ -109,7 +111,19 @@ fn trains_score(route: &Vec<City>) -> u16 {
         .iter()
         .zip(route.split_first().unwrap().1.iter())
     {
-        score += routes[&depart][&arrive] as u16;
+        score += match routes[&depart][&arrive] {
+            1 => 1 as u16,
+            2 => 2 as u16,
+            3 => 4 as u16,
+            4 => 7 as u16,
+            6 => 15 as u16,
+            8 => 21 as u16,
+            // The default case that panics normally should never
+            // happen, as the only train lengths between two cities in
+            // the board game are the ones covered in the previous
+            // cases. But rust wants me to cover all cases :)
+            _ => panic!("Unsupported number of trains"),
+        };
     }
     score
 }

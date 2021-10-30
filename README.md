@@ -9,20 +9,43 @@ there was no evidence if these where the optimum solutions. So I told
 myself, this is a nice project to work on my programming skills in
 rust and in exploring algorithms for solving this.
 
-This is the first attempt and there is no logic, only brute force is
-used. In the first step, all possible routes are explored (starting
-from Edinburgh if I remember correctly) and then all these possible
-routes are scored, and then I get the highest score. I' not sure that
-this is correct, it seems to bring routes that are valid and that have
-large scores, but each time I run it I get a different result of
-maximum number of routes.
+## Architecture
 
-Also one this that is odd is that the number of routes and the maximum
-score route is different if I run the program in debug mode or in
-release mode, I'm not sure if something like that should happen.
+This is the first attempt and no specific algorithmic logic is used,
+only brute force, basically.
+
+The user, when executing the cli program, can provide the starting
+city for the algorithm with the `-c` or `--city` option. If no city if
+provided or if the city provided is non existent, then Edinburgh is
+used by default.
+
+The program execution consists of two steps. In the first step, all
+possible routes are explored, starting from the initial city. In the
+second step, all these possible routes are scored, and then the route
+with the highest score is found.
+
+The correctness of the program is not certain. It seems to create
+valid routes and after fixing a logic bug, the score is correct,
+taking into account:
+* one of the big tickets
+* all small tickets that are covered
+* the score of the trains used to connect the route
+* the score of 10 for the express bonus
+* the score of 12 for three unused stations
+
+Also, I guess because of the use of HashMaps, the maximum number of
+routes computed each time differs. My reasoning is that because
+HashMaps are not ordered and each time the way that are stored in
+memory is kind of arbitrary, the computed routes differ also. Maybe
+there is some bug in my logic there that I need to check.
+
+One final consideration is that all routes start from the initial city
+and no route is created where the initial city is in the middle of a
+route.
 
 ## Future considerations
 
-After tackling this problem, I am thinking of checking solutions in
-other games too, or tackling this same problem with different
-algorithms, maybe genetic algorithms?
+This that I could do in the future:
+- [ ] Add color of routes
+- [ ] Experiment with different algorithms for traversing the network
+- [ ] Use stations for fulfilling more tickets
