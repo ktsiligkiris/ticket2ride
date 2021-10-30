@@ -9,6 +9,26 @@ pub fn get_scores(route: Vec<City>) -> u16 {
     score
 }
 
+#[test]
+fn test_get_scores() {
+    let test_route = vec![
+        City::Edinburgh,
+        City::London,
+        City::Dieppe,
+        City::Paris,
+        City::Zuerich,
+        City::Muenchen,
+        City::Wien,
+        City::Budapest,
+        City::Bucuresti,
+        City::Sofia,
+        City::Athina,
+        City::Smyrna,
+    ];
+    let test_score = get_scores(test_route);
+    assert_eq!(test_score, 98);
+}
+
 fn big_ticket_score(route: &Vec<City>) -> u16 {
     let mut score: u16 = 0;
     let big_tickets = get_big_tickets();
@@ -18,6 +38,52 @@ fn big_ticket_score(route: &Vec<City>) -> u16 {
         }
     }
     score
+}
+
+#[test]
+fn test_big_ticket_score() {
+    let exact_route = vec![
+        City::Lisboa,
+        City::Madrid,
+        City::Pamplona,
+        City::Paris,
+        City::Frankfurt,
+        City::Berlin,
+        City::Danzig,
+    ];
+    let exact_score = big_ticket_score(&exact_route);
+    assert_eq!(exact_score, 20);
+}
+
+#[test]
+fn test_big_ticket_extended_route() {
+    let extended_route = vec![
+        City::Cadiz,
+        City::Lisboa,
+        City::Madrid,
+        City::Pamplona,
+        City::Paris,
+        City::Frankfurt,
+        City::Berlin,
+        City::Danzig,
+        City::Riga,
+    ];
+    let extended_score = big_ticket_score(&extended_route);
+    assert_eq!(extended_score, 20);
+}
+
+#[test]
+fn test_big_ticket_only_start() {
+    let non_route_start = vec![City::Lisboa, City::Madrid];
+    let non_score_start = big_ticket_score(&non_route_start);
+    assert_eq!(non_score_start, 0);
+}
+
+#[test]
+fn test_big_ticket_only_end() {
+    let non_route_end = vec![City::Berlin, City::Danzig];
+    let non_score_end = big_ticket_score(&non_route_end);
+    assert_eq!(non_score_end, 0);
 }
 
 fn ticket_score(route: &Vec<City>) -> u16 {
