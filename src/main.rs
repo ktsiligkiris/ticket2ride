@@ -1,28 +1,14 @@
-#[macro_use]
-extern crate clap;
-
-use clap::{App, Arg};
 use std::collections::HashMap;
 use std::str::FromStr;
 use ticket2ride::{max_key, City};
+
+mod cli;
 mod experiment;
 mod routing;
 mod scoring;
 
 fn main() {
-    let matches = App::new("ticket2ride max route finder")
-        .version(crate_version!())
-        .author(crate_authors!())
-        .about("Tries to find the theoretical max score in ticket2ride")
-        .arg(
-            Arg::with_name("city")
-                .short("c")
-                .long("city")
-                .value_name("Start")
-                .help("Sets the City to start from")
-                .takes_value(true),
-        )
-        .get_matches();
+    let matches = cli::get_cli().get_matches();
 
     let startcity = matches.value_of("city").unwrap_or("Edinburgh");
     /* These functions come from the experiment.rs file where I keep
