@@ -13,4 +13,13 @@ pub fn get_cli() -> App<'static, 'static> {
                 .help("Sets the City to start from")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("logging")
+                .long("log-level")
+                .require_equals(true)
+                .value_name("LEVEL")
+                .help("Sets the logging level of the app")
+                .takes_value(true)
+                .possible_values(&["info", "debug"]),
+        )
 }

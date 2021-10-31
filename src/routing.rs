@@ -1,7 +1,7 @@
+use log::{debug, info};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use ticket2ride::{create_network, City};
-
 /** Let's just think what we need for the design of this function to
     work.
 
@@ -94,7 +94,7 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
                         current_city = *city;
                         trains += graph.get(&current_city).unwrap()[&dead_end];
                     }
-                    None => println!("Route {:?} is the last one", route_id),
+                    None => info!("Route {:?} is the last one", route_id),
                 };
             }
         }
