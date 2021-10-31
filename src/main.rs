@@ -2,12 +2,10 @@ use flexi_logger::{Duplicate, FileSpec, Logger};
 use log::{debug, info};
 use std::collections::HashMap;
 use std::str::FromStr;
-use ticket2ride::{max_key, City};
+use ticket2ride::{max_key, routing, scoring, City};
 
 mod cli;
 mod experiment;
-mod routing;
-mod scoring;
 
 fn main() {
     // Get command line options

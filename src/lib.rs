@@ -7,7 +7,8 @@
 
 use std::collections::HashMap;
 use std::str::FromStr;
-
+pub mod routing;
+pub mod scoring;
 /// All available cities of the game are included into this handy
 /// enumeration, so that my code is more clear. The cities are not
 /// entered with any particular order, I just started from Edinburgh

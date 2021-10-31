@@ -1,8 +1,8 @@
 use crate::scoring;
+use crate::{create_network, City};
 use log::{debug, info};
 use std::collections::HashMap;
 use std::collections::HashSet;
-use ticket2ride::{create_network, City};
 
 /// # Considerations in planning traversal
 ///

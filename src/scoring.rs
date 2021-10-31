@@ -1,4 +1,4 @@
-use ticket2ride::{create_network, get_big_tickets, get_tickets, City};
+use crate::{create_network, get_big_tickets, get_tickets, City};
 
 pub fn get_scores(route: Vec<City>) -> u16 {
     let mut score: u16 = 0;
