@@ -31,7 +31,7 @@ fn test_get_scores() {
     assert_eq!(test_score, 120);
 }
 
-fn big_ticket_score(route: &Vec<City>) -> u16 {
+pub fn big_ticket_score(route: &Vec<City>) -> u16 {
     let mut score: u16 = 0;
     let big_tickets = get_big_tickets();
     for ticket in big_tickets.iter() {

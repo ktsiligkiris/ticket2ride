@@ -1,40 +1,41 @@
+use crate::scoring;
 use log::{debug, info};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use ticket2ride::{create_network, City};
-/** Let's just think what we need for the design of this function to
-    work.
 
-First thing, we have a TTL value which is the number of *trains* can't
-be more than 45.
-
-So we start from source.
-
-We check the first child, if it is visited. So one hashmap to add the
-visited children.
-
-If it's not visited and if the current number of trains is not > = the
-distance then we can go there.
-
-So the child is added to *current vector* with the first id, it is
-also added to visited, and it becomes the next current point in our
-graph.
-
-Then check children continuously, until we either reach a point where
-no more trains are available, or no more non visited children are
-available.
-
-Then we need to back track, how do we do that? So there is a
-solution. We have a mutable vector that new children are pushed there,
-and when we reach a point that nothing can be done, then this vector
-is cloned inside the hashmap, the id of the hashmap is incremented,
-and we pop from the end of the vector, until we find a city that has
-unvisited children.
-
-In this way, we can have all the available courses starting from one
-city. Also, the thing to do is to remove a child from visited when
-backtracking, but to exclude it from the children, so that we don't
-have a loop of going and returning.*/
+/// # Considerations in planning traversal
+///
+/// We have a TTL value which is the number of *trains* which can't be
+/// more than 45.
+///
+/// We start from source.
+///
+/// We check the first child, if it is visited. So one hashmap to add the
+/// visited children.
+///
+/// If it's not visited and if the current number of trains is >= the
+/// distance then we can go there.
+///
+/// So the child is added to *current vector* with the first id, it is
+/// also added to visited, and it becomes the next current point in our
+/// graph.
+///
+/// Then check children continuously, until we either reach a point where
+/// no more trains are available, or no more non visited children are
+/// available.
+///
+/// Then we need to back track, how do we do that? So there is a
+/// solution. We have a mutable vector that new children are pushed there,
+/// and when we reach a point that nothing can be done, then this vector
+/// is cloned inside the hashmap, the id of the hashmap is incremented,
+/// and we pop from the end of the vector, until we find a city that has
+/// unvisited children.
+///
+/// In this way, we can have all the available courses starting from one
+/// city. Also, the thing to do is to remove a child from visited when
+/// backtracking, but to exclude it from the children, so that we don't
+/// have a loop of going and returning.
 pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
     let mut routes: HashMap<u32, Vec<City>> = HashMap::new();
     let mut route_id: u32 = 0;
@@ -42,10 +43,12 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
     let mut trains: u8 = 45;
     let graph = create_network();
     let mut current_city: City = source.clone();
+    debug!("Current city {:?}", current_city);
     let mut visited: HashMap<City, HashSet<City>> = HashMap::new();
     let mut backtracking: bool = false;
 
     current_route.push(current_city);
+    debug!("current_route {:?}", current_route);
     visited.insert(current_city, HashSet::new());
 
     while !current_route.is_empty() {
@@ -59,6 +62,7 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
                 }
             });
         let dest = destinations.next();
+        debug!("Destination: {:?}", dest);
         match dest {
             Some((next, distance)) => {
                 backtracking = false;
@@ -73,6 +77,7 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
                         .insert(*next);
                     current_city = *next;
                     current_route.push(current_city);
+                    debug!("current_route: {:?}", current_route);
                     trains -= *distance;
                 } else {
                     visited
@@ -83,8 +88,15 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
             }
             None => {
                 if backtracking == false {
-                    routes.insert(route_id, current_route.clone());
-                    route_id += 1;
+                    // Add only routes that complete any big ticket,
+                    // otherwise don't bother :)
+                    // And also don't include routes that are less
+                    // than the largest ones (or with two trains less)
+                    if scoring::big_ticket_score(&current_route) != 0 && trains <= 2 {
+                        debug!("current_route before added to routes: {:?}", current_route);
+                        routes.insert(route_id, current_route.clone());
+                        route_id += 1;
+                    }
                     backtracking = true;
                 }
                 let dead_end = current_route.pop().unwrap();
