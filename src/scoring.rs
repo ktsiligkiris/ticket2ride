@@ -28,7 +28,7 @@ fn test_get_scores() {
         City::Smyrna,
     ];
     let test_score = get_scores(test_route);
-    assert_eq!(test_score, 98);
+    assert_eq!(test_score, 120);
 }
 
 fn big_ticket_score(route: &Vec<City>) -> u16 {
