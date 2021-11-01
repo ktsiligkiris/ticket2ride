@@ -12,7 +12,7 @@ fn main() {
     let matches = cli::get_cli().get_matches();
 
     // Setup logging first
-    Logger::try_with_env_or_str(matches.value_of("logging").unwrap_or("none"))
+    Logger::try_with_str(matches.value_of("logging").unwrap_or("none"))
         .unwrap()
         .log_to_file(FileSpec::default())
         .duplicate_to_stderr(Duplicate::Info)

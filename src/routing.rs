@@ -1,3 +1,6 @@
+//! The routing module contains all functions relative with computing
+//! the route on the board network of cities.
+
 use crate::scoring;
 use crate::{create_network, City};
 use log::{debug, info};
@@ -115,6 +118,11 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
     routes
 }
 
+/// This is an implementation of the Dijkstra algorithm for finding
+/// the shortest route between two cities. It was early implemented in
+/// this project for learning purposes and it has no practical
+/// significance (I think) since we search for the route with the
+/// largest score, not the route with the smallest distance.
 pub fn dijkstra(
     source: City,
     arrival: City,

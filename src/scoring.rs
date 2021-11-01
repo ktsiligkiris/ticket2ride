@@ -1,5 +1,12 @@
+//! The scoring module contains all the functions that are needed for
+//! computing the score of a route on the board of ticket to ride.
+
 use crate::{create_network, get_big_tickets, get_tickets, City};
 
+/// Receives a vector of cities that constitute a route, and returns
+/// the score of this route, based on the big tickets and the regular
+/// tickets completed, the trains used in city connections, 10 points
+/// for the express bonus and 12 points for no stations used.
 pub fn get_scores(route: Vec<City>) -> u16 {
     let mut score: u16 = 0;
 
@@ -31,6 +38,11 @@ fn test_get_scores() {
     assert_eq!(test_score, 120);
 }
 
+/// Receives a vector of cities and returns the score from completing
+/// a big ticket. If no big tickets are completed, then it returns
+/// zero, so this is a nice way to prune routes in the routing module
+/// that don't complete a big ticket (and therefore are not candidates
+/// for the maximum theoretical score).
 pub fn big_ticket_score(route: &Vec<City>) -> u16 {
     let mut score: u16 = 0;
     let big_tickets = get_big_tickets();
