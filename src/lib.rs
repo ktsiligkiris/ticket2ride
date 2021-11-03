@@ -1,9 +1,12 @@
 #![warn(missing_docs)]
-//! Relevant data structures for representing ticket to ride Europe.
+//! This project contains data structures for representing the ticket
+//! to ride Europe edition game and some functions for computing
+//! possible routes and their respective scores.
 //!
 //! Here I provide some enumerations and hash maps that are required
-//! for representing the ticket to ride Europe game in my code. This
-//! is a first implementation so be gentle in judging it.
+//! for representing the ticket to ride Europe game in my code. The
+//! functions for computing routes and scores are included in the
+//! respective modules.
 
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -114,11 +117,10 @@ pub enum City {
     Sochi,
 }
 
-/// When I decided to provide the City to start the solution I
-/// realized that I had to convert the string to the enumeration. In
-/// order to do that, I needed to implement the FromStr trait, which
-/// gives to the enumeration the handy from_str function! I just had
-/// to map each string to the specific city.
+/// The FromStr trait gives to the enumeration the handy from_str
+/// function that is used to convert a string (provided by command
+/// line arguments) to a City. I had to map each string to the
+/// specific city.
 /// # Example
 ///
 /// ```
@@ -629,4 +631,16 @@ where
     V: Ord,
 {
     hash.iter().max_by(|a, b| a.1.cmp(&b.1)).map(|(k, _v)| k)
+}
+
+#[test]
+fn test_max_key() {
+    let mut some_routes = HashMap::<City, u16>::new();
+    some_routes.insert(City::London, 30);
+    some_routes.insert(City::Athina, 70);
+    some_routes.insert(City::Lisboa, 7);
+    some_routes.insert(City::Moskva, 69);
+
+    let largest_city = max_key(&some_routes).unwrap();
+    assert_eq!(*largest_city, City::Athina);
 }

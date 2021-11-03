@@ -1,6 +1,6 @@
 #![allow(dead_code)]
-use crate::routing;
-use crate::scoring;
+use ticket2ride::routing;
+use ticket2ride::scoring;
 use ticket2ride::*;
 
 pub fn demo_bigtickets() {

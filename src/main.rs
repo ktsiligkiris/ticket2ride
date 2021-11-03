@@ -31,22 +31,30 @@ fn main() {
     // experiment::demo_network();
 
     //experiment::demo_dijkstra();
+    if let Some(matches) = matches.subcommand_matches("info") {
+        if matches.is_present("big") {
+            experiment::demo_bigtickets();
+        }
+        if matches.is_present("normal") {
+            experiment::demo_normaltickets();
+        }
+    } else {
+        info!("Start traversing the network.");
+        let routes = routing::traverse(City::from_str(startcity).unwrap());
+        info!("Start computing scores for all routes.");
+        let mut scores: HashMap<u32, u16> = HashMap::new();
+        for (id, route) in routes.iter() {
+            let score: u16 = scoring::get_scores(route.to_vec());
+            scores.entry(*id).or_insert(score);
+        }
+        let maxkey = max_key(&scores).unwrap();
 
-    info!("Start traversing the network.");
-    let routes = routing::traverse(City::from_str(startcity).unwrap());
-    info!("Start computing scores for all routes.");
-    let mut scores: HashMap<u32, u16> = HashMap::new();
-    for (id, route) in routes.iter() {
-        let score: u16 = scoring::get_scores(route.to_vec());
-        scores.entry(*id).or_insert(score);
+        println!(
+            "The route {:?} has maximum score {:?}",
+            routes.get(&maxkey).unwrap(),
+            scores.get(&maxkey).unwrap()
+        );
     }
-    let maxkey = max_key(&scores).unwrap();
-
-    println!(
-        "The route {:?} has maximum score {:?}",
-        routes.get(&maxkey).unwrap(),
-        scores.get(&maxkey).unwrap()
-    );
 }
 
 #[cfg(test)]

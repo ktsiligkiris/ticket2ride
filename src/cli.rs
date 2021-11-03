@@ -1,4 +1,4 @@
-use clap::{crate_authors, crate_version, App, Arg};
+use clap::{crate_authors, crate_version, App, Arg, SubCommand};
 
 pub fn get_cli() -> App<'static, 'static> {
     App::new("ticket2ride max route finder")
@@ -21,5 +21,25 @@ pub fn get_cli() -> App<'static, 'static> {
                 .help("Sets the logging level of the app")
                 .takes_value(true)
                 .possible_values(&["info", "debug"]),
+        )
+        .subcommand(
+            SubCommand::with_name("info")
+                .about("provides game info")
+                .version(crate_version!())
+                .author(crate_authors!())
+                .arg(
+                    Arg::with_name("big")
+                        .short("b")
+                        .long("big-tickets")
+                        .help("Output the available big tickets in the game")
+                        .required_unless("normal"),
+                )
+                .arg(
+                    Arg::with_name("normal")
+                        .short("n")
+                        .long("normal-tickets")
+                        .help("Output the available normal tickets in the game")
+                        .required_unless("big"),
+                ),
         )
 }
