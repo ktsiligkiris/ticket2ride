@@ -42,4 +42,10 @@ pub fn get_cli() -> App<'static, 'static> {
                         .required_unless("big"),
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("solve")
+                .about("try to find a solution")
+                .version(crate_version!())
+                .author(crate_authors!()),
+        )
 }

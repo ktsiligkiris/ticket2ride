@@ -10,13 +10,15 @@
 
 use std::collections::HashMap;
 use std::str::FromStr;
+use strum_macros::EnumIter;
+
 pub mod routing;
 pub mod scoring;
 /// All available cities of the game are included into this handy
 /// enumeration, so that my code is more clear. The cities are not
 /// entered with any particular order, I just started from Edinburgh
 /// and traversed the map gradually most of the times randomly.
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy, EnumIter)]
 pub enum City {
     /// These are all cities included in the board game of Ticket to
     /// Ride, Europe edition. They don't have a specific meaning to be

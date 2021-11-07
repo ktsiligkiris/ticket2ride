@@ -2,6 +2,7 @@ use flexi_logger::{Duplicate, FileSpec, Logger};
 use log::{debug, info};
 use std::collections::HashMap;
 use std::str::FromStr;
+use strum::IntoEnumIterator;
 use ticket2ride::{max_key, routing, scoring, City};
 
 mod cli;
@@ -31,30 +32,46 @@ fn main() {
     // experiment::demo_network();
 
     //experiment::demo_dijkstra();
-    if let Some(matches) = matches.subcommand_matches("info") {
-        if matches.is_present("big") {
+    if let Some(matched) = matches.subcommand_matches("info") {
+        if matched.is_present("big") {
             experiment::demo_bigtickets();
         }
         if matches.is_present("normal") {
             experiment::demo_normaltickets();
         }
-    } else {
-        info!("Start traversing the network.");
-        let routes = routing::traverse(City::from_str(startcity).unwrap());
-        info!("Start computing scores for all routes.");
-        let mut scores: HashMap<u32, u16> = HashMap::new();
-        for (id, route) in routes.iter() {
-            let score: u16 = scoring::get_scores(route.to_vec());
-            scores.entry(*id).or_insert(score);
+    } else if let Some(_matched) = matches.subcommand_matches("solve") {
+        let mut results: HashMap<City, u16> = HashMap::new();
+        for city in City::iter() {
+            let (_, score) = find_max(city);
+            results.entry(city).or_insert(score);
         }
-        let maxkey = max_key(&scores).unwrap();
-
+        let maxcity = max_key(&results).unwrap();
         println!(
-            "The route {:?} has maximum score {:?}",
-            routes.get(&maxkey).unwrap(),
-            scores.get(&maxkey).unwrap()
+            "the city {:?} has the maximum score of {:?}",
+            maxcity,
+            results.get(&maxcity).unwrap()
         );
+    } else {
+        let (route, score) = find_max(City::from_str(startcity).unwrap());
+
+        println!("The route {:?} has maximum score {:?}", route, score);
     }
+}
+
+fn find_max(start: City) -> (Vec<City>, u16) {
+    info!("Start traversing the network from {:?}", start);
+    let routes = routing::traverse(start);
+    info!("Start computing scores for all routes.");
+    let mut scores: HashMap<u32, u16> = HashMap::new();
+    for (id, route) in routes.iter() {
+        let score: u16 = scoring::get_scores(route.to_vec());
+        scores.entry(*id).or_insert(score);
+    }
+    let maxkey = max_key(&scores).unwrap();
+    let route: Vec<City> = routes.get(&maxkey).unwrap().to_vec();
+    let score: u16 = *scores.get(&maxkey).unwrap();
+    info!("Maximum score is {:?}", score);
+    (route, score)
 }
 
 #[cfg(test)]

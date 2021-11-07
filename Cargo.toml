@@ -1,6 +1,6 @@
 [package]
 name = "ticket2ride"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Kostas Tsiligkiris <ktsiligkiris@outlook.com>"]
 license = "Apache-2.0"
 description = "A small program to compute the theoretically largest score in ticket to ride Europe"
@@ -21,3 +21,5 @@ path = "src/lib.rs"
 clap = "2.33.3"
 log = "^0.4.14"
 flexi_logger = "^0.19.5"
+strum = "^0.22"
+strum_macros = "^0.22"
