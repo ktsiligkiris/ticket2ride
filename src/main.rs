@@ -36,7 +36,7 @@ fn main() {
         if matched.is_present("big") {
             experiment::demo_bigtickets();
         }
-        if matches.is_present("normal") {
+        if matched.is_present("normal") {
             experiment::demo_normaltickets();
         }
     } else if let Some(_matched) = matches.subcommand_matches("solve") {
