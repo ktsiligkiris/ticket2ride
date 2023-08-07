@@ -45,7 +45,7 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
     let mut current_route: Vec<City> = Vec::new();
     let mut trains: u8 = 45;
     let graph = create_network();
-    let mut current_city: City = source.clone();
+    let mut current_city: City = source;
     debug!("Current city {:?}", current_city);
     let mut visited: HashMap<City, HashSet<City>> = HashMap::new();
     let mut backtracking: bool = false;
@@ -55,15 +55,10 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
     visited.insert(current_city, HashSet::new());
 
     while !current_route.is_empty() {
-        let mut destinations = graph
-            .get(&current_city)
-            .unwrap()
-            .iter()
-            .filter(|city| match city {
-                (k, _) => {
-                    !visited[&current_city].contains(k) && !current_route.iter().any(|i| i == *k)
-                }
-            });
+        let mut destinations = graph.get(&current_city).unwrap().iter().filter(|city| {
+            let (k, _) = city;
+            !visited[&current_city].contains(k) && !current_route.iter().any(|i| i == *k)
+        });
         let dest = destinations.next();
         debug!("Destination: {:?}", dest);
         match dest {
@@ -90,7 +85,7 @@ pub fn traverse(source: City) -> HashMap<u32, Vec<City>> {
                 }
             }
             None => {
-                if backtracking == false {
+                if !backtracking {
                     // Add only routes that complete any big ticket,
                     // otherwise don't bother :)
                     // And also don't include routes that are less
@@ -148,13 +143,13 @@ pub fn dijkstra(
         u = q[0];
         // Get the vertex with the smallest distance from q.
         for city in q.iter() {
-            if dist.get(&city).unwrap() < dist.get(&u).unwrap() {
+            if dist.get(city).unwrap() < dist.get(&u).unwrap() {
                 u = *city;
             }
         }
         // the vertex with the shortest distance in q is our destination
         // then quit from the while loop prematurely.
-        if u == arrival && stop == true {
+        if u == arrival && stop {
             break;
         }
 
@@ -169,12 +164,12 @@ pub fn dijkstra(
                 let alt = dist.get(&u).unwrap() + *distance;
                 // Maximum number of trains in game is 45, so you can't have a distance
                 // greater than that.
-                if alt < *dist.get(&destination).unwrap() && alt <= 45 {
+                if alt < *dist.get(destination).unwrap() && alt <= 45 {
                     dist.insert(*destination, alt);
                     prev.insert(*destination, u);
                 }
             }
         }
     }
-    return (dist, prev);
+    (dist, prev)
 }

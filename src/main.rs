@@ -49,7 +49,7 @@ fn main() {
         println!(
             "the city {:?} has the maximum score of {:?}",
             maxcity,
-            results.get(&maxcity).unwrap()
+            results.get(maxcity).unwrap()
         );
     } else {
         let (route, score) = find_max(City::from_str(startcity).unwrap());
@@ -68,8 +68,8 @@ fn find_max(start: City) -> (Vec<City>, u16) {
         scores.entry(*id).or_insert(score);
     }
     let maxkey = max_key(&scores).unwrap();
-    let route: Vec<City> = routes.get(&maxkey).unwrap().to_vec();
-    let score: u16 = *scores.get(&maxkey).unwrap();
+    let route: Vec<City> = routes.get(maxkey).unwrap().to_vec();
+    let score: u16 = *scores.get(maxkey).unwrap();
     info!("Maximum score is {:?}", score);
     (route, score)
 }

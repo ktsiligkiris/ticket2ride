@@ -43,7 +43,7 @@ fn test_get_scores() {
 /// zero, so this is a nice way to prune routes in the routing module
 /// that don't complete a big ticket (and therefore are not candidates
 /// for the maximum theoretical score).
-pub fn big_ticket_score(route: &Vec<City>) -> u16 {
+pub fn big_ticket_score(route: &[City]) -> u16 {
     let mut score: u16 = 0;
     let big_tickets = get_big_tickets();
     for ticket in big_tickets.iter() {
@@ -100,7 +100,7 @@ fn test_big_ticket_only_end() {
     assert_eq!(non_score_end, 0);
 }
 
-fn ticket_score(route: &Vec<City>) -> u16 {
+fn ticket_score(route: &[City]) -> u16 {
     let mut score: u16 = 0;
     let small_tickets = get_tickets();
 
@@ -112,7 +112,7 @@ fn ticket_score(route: &Vec<City>) -> u16 {
     score
 }
 
-fn trains_score(route: &Vec<City>) -> u16 {
+fn trains_score(route: &[City]) -> u16 {
     let mut score: u16 = 0;
     let routes = create_network();
 
@@ -123,13 +123,13 @@ fn trains_score(route: &Vec<City>) -> u16 {
         .iter()
         .zip(route.split_first().unwrap().1.iter())
     {
-        score += match routes[&depart][&arrive] {
-            1 => 1 as u16,
-            2 => 2 as u16,
-            3 => 4 as u16,
-            4 => 7 as u16,
-            6 => 15 as u16,
-            8 => 21 as u16,
+        score += match routes[depart][arrive] {
+            1 => 1_u16,
+            2 => 2_u16,
+            3 => 4_u16,
+            4 => 7_u16,
+            6 => 15_u16,
+            8 => 21_u16,
             // The default case that panics normally should never
             // happen, as the only train lengths between two cities in
             // the board game are the ones covered in the previous

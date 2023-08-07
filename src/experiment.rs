@@ -65,13 +65,13 @@ pub fn demo_dijkstra() {
     println!(
         "The most distant city from Edinburgh is {:?} and it's distance is {:?}",
         distant_city,
-        distances.get(&distant_city).unwrap()
+        distances.get(distant_city).unwrap()
     );
     let mut big_route: Vec<City> = Vec::new();
     big_route.push(*distant_city);
     let mut current_city = distant_city;
     while *current_city != City::Edinburgh {
-        current_city = previous.get(&current_city).unwrap();
+        current_city = previous.get(current_city).unwrap();
         big_route.push(*current_city);
     }
     println!("The big route is {:?}", big_route);

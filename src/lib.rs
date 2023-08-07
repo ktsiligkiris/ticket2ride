@@ -213,11 +213,11 @@ impl Ticket {
     /// let small_ticket = Ticket::new(City::Edinburgh, City::Athina, 20);
     /// ```
     pub fn new(depart: City, arrive: City, value: u8) -> Ticket {
-        return Ticket {
+        Ticket {
             depart,
             arrive,
             value,
-        };
+        }
     }
 }
 
@@ -632,7 +632,7 @@ pub fn max_key<K, V>(hash: &HashMap<K, V>) -> Option<&K>
 where
     V: Ord,
 {
-    hash.iter().max_by(|a, b| a.1.cmp(&b.1)).map(|(k, _v)| k)
+    hash.iter().max_by(|a, b| a.1.cmp(b.1)).map(|(k, _v)| k)
 }
 
 #[test]
