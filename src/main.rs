@@ -13,7 +13,7 @@ fn main() {
     let matches = cli::get_cli().get_matches();
 
     // Setup logging first
-    Logger::try_with_str(matches.value_of("logging").unwrap_or("none"))
+    Logger::try_with_str(matches.get_one::<String>("logging").unwrap())
         .unwrap()
         .log_to_file(FileSpec::default())
         .duplicate_to_stderr(Duplicate::Info)
@@ -21,7 +21,7 @@ fn main() {
         .unwrap();
     debug!("Debug reporting turned on!");
 
-    let startcity = matches.value_of("city").unwrap_or("Edinburgh");
+    let startcity = matches.get_one::<String>("city").unwrap();
     /* These functions come from the experiment.rs file where I keep
      * demo functions to test various functionality. In this way, I
      * keep main function more clean.*/
@@ -33,10 +33,10 @@ fn main() {
 
     //experiment::demo_dijkstra();
     if let Some(matched) = matches.subcommand_matches("info") {
-        if matched.is_present("big") {
+        if matched.contains_id("big") {
             experiment::demo_bigtickets();
         }
-        if matched.is_present("normal") {
+        if matched.contains_id("normal") {
             experiment::demo_normaltickets();
         }
     } else if let Some(_matched) = matches.subcommand_matches("solve") {

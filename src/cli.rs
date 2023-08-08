@@ -1,49 +1,49 @@
-use clap::{crate_authors, crate_version, App, Arg, SubCommand};
+use clap::{crate_authors, crate_version, Arg, Command};
 
-pub fn get_cli() -> App<'static, 'static> {
-    App::new("ticket2ride max route finder")
+pub fn get_cli() -> Command {
+    Command::new("ticket2ride max route finder")
         .version(crate_version!())
         .author(crate_authors!())
         .about("Tries to find the theoretical max score in ticket2ride")
         .arg(
-            Arg::with_name("city")
-                .short("c")
+            Arg::new("city")
+                .short('c')
                 .long("city")
                 .value_name("Start")
-                .help("Sets the City to start from")
-                .takes_value(true),
+                .default_value("Edinburgh")
+                .help("Sets the City to start from"),
         )
         .arg(
-            Arg::with_name("logging")
+            Arg::new("logging")
                 .long("log-level")
+                .default_value("none")
                 .require_equals(true)
                 .value_name("LEVEL")
                 .help("Sets the logging level of the app")
-                .takes_value(true)
-                .possible_values(&["info", "debug"]),
+                .value_parser(["info", "debug", "none"]),
         )
         .subcommand(
-            SubCommand::with_name("info")
+            Command::new("info")
                 .about("provides game info")
                 .version(crate_version!())
                 .author(crate_authors!())
                 .arg(
-                    Arg::with_name("big")
-                        .short("b")
+                    Arg::new("big")
+                        .short('b')
                         .long("big-tickets")
                         .help("Output the available big tickets in the game")
-                        .required_unless("normal"),
+                        .required_unless_present("normal"),
                 )
                 .arg(
-                    Arg::with_name("normal")
-                        .short("n")
+                    Arg::new("normal")
+                        .short('n')
                         .long("normal-tickets")
                         .help("Output the available normal tickets in the game")
-                        .required_unless("big"),
+                        .required_unless_present("big"),
                 ),
         )
         .subcommand(
-            SubCommand::with_name("solve")
+            Command::new("solve")
                 .about("try to find a solution")
                 .version(crate_version!())
                 .author(crate_authors!()),

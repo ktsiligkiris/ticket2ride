@@ -18,7 +18,7 @@ name = "ticket2ride"
 path = "src/lib.rs"
 
 [dependencies]
-clap = "4.3.21"
+clap = { version = "4.3.21", features = ["cargo"] }
 log = "^0.4.14"
 flexi_logger = "0.25.6"
 strum = "^0.25.0"
