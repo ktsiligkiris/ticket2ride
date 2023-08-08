@@ -33,10 +33,10 @@ fn main() {
 
     //experiment::demo_dijkstra();
     if let Some(matched) = matches.subcommand_matches("info") {
-        if matched.contains_id("big") {
+        if matched.contains_id("big") && matched.get_flag("big") {
             experiment::demo_bigtickets();
         }
-        if matched.contains_id("normal") {
+        if matched.contains_id("normal") && matched.get_flag("normal") {
             experiment::demo_normaltickets();
         }
     } else if let Some(_matched) = matches.subcommand_matches("solve") {

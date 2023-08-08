@@ -31,6 +31,7 @@ pub fn get_cli() -> Command {
                     Arg::new("big")
                         .short('b')
                         .long("big-tickets")
+                        .action(clap::ArgAction::SetTrue)
                         .help("Output the available big tickets in the game")
                         .required_unless_present("normal"),
                 )
@@ -38,6 +39,7 @@ pub fn get_cli() -> Command {
                     Arg::new("normal")
                         .short('n')
                         .long("normal-tickets")
+                        .action(clap::ArgAction::SetTrue)
                         .help("Output the available normal tickets in the game")
                         .required_unless_present("big"),
                 ),
